@@ -1,0 +1,148 @@
+{
+  "foods": [
+    {
+      "id": "cake_001",
+      "name": "Chocolate Heaven Cake",
+      "category": "cake",
+      "price": 12.99,
+      "weight": "500g",
+      "imagePath": "images/cake 1.png",
+      "description": "Rich chocolate cake with layers of creamy chocolate frosting",
+      "rating": 4.8,
+      "isPopular": true
+    },
+    {
+      "id": "cake_002",
+      "name": "Vanilla Dream Delight",
+      "category": "cake",
+      "price": 10.99,
+      "weight": "450g",
+      "imagePath": "images/cake 2.png",
+      "description": "Light and fluffy vanilla cake with smooth vanilla buttercream",
+      "rating": 4.6,
+      "isPopular": false
+    },
+    {
+      "id": "cake_003",
+      "name": "Nutty Pistachio Cake",
+      "category": "cake",
+      "price": 14.99,
+      "weight": "500g",
+      "imagePath": "images/cake 3.png",
+      "description": "Delicate pistachio cake with pistachio cream and chopped nuts",
+      "rating": 4.7,
+      "isPopular": false
+    },
+    {
+      "id": "cake_004",
+      "name": "Rich Coffee Mocha Cake",
+      "category": "cake",
+      "price": 13.99,
+      "weight": "480g",
+      "imagePath": "images/cake 4.png",
+      "description": "Coffee-infused cake with mocha frosting and coffee bean decoration",
+      "rating": 4.9,
+      "isPopular": true
+    },
+    {
+      "id": "cake_005",
+      "name": "Red Velvet Bliss Cake",
+      "category": "cake",
+      "price": 15.99,
+      "weight": "500g",
+      "imagePath": "images/cake 5.png",
+      "description": "Classic red velvet cake with cream cheese frosting",
+      "rating": 4.8,
+      "isPopular": true
+    },
+    {
+      "id": "bread_001",
+      "name": "Bagel Multigrain",
+      "category": "bread",
+      "price": 4.0,
+      "weight": "250g",
+      "imagePath": "images/bread.png",
+      "description": "Fresh multigrain bagel with seeds and grains",
+      "rating": 4.3,
+      "isPopular": false
+    },
+    {
+      "id": "bread_002",
+      "name": "Artisan Sourdough",
+      "category": "bread",
+      "price": 6.5,
+      "weight": "400g",
+      "imagePath": "images/bread 3.png",
+      "description": "Traditional sourdough bread with crispy crust",
+      "rating": 4.5,
+      "isPopular": true
+    },
+    {
+      "id": "bread_003",
+      "name": "Whole Wheat Loaf",
+      "category": "bread",
+      "price": 5.5,
+      "weight": "350g",
+      "imagePath": "images/bread_2-.png",
+      "description": "Healthy whole wheat bread perfect for daily consumption",
+      "rating": 4.2,
+      "isPopular": false
+    },
+    {
+      "id": "cookie_001",
+      "name": "Whole Grain Spelt",
+      "category": "cookie",
+      "price": 8.5,
+      "weight": "300g",
+      "imagePath": "images/cookie 3.png",
+      "description": "Crunchy whole grain spelt cookies with natural sweetness",
+      "rating": 4.4,
+      "isPopular": false
+    },
+    {
+      "id": "cookie_002",
+      "name": "Chocolate Chip Cookies",
+      "category": "cookie",
+      "price": 7.99,
+      "weight": "250g",
+      "imagePath": "images/cookie 2.png",
+      "description": "Classic chocolate chip cookies with premium chocolate chunks",
+      "rating": 4.7,
+      "isPopular": true
+    },
+    {
+      "id": "pastry_001",
+      "name": "Butter Croissant",
+      "category": "pastry",
+      "price": 8.5,
+      "weight": "175g",
+      "imagePath": "images/croissant.png",
+      "description": "Flaky butter croissant made with premium French butter",
+      "rating": 4.6,
+      "isPopular": true
+    },
+    {
+      "id": "donut_001",
+      "name": "Glazed Donut",
+      "category": "donut",
+      "price": 3.5,
+      "weight": "85g",
+      "imagePath": "images/donut item.png",
+      "description": "Classic glazed donut with sweet glaze coating",
+      "rating": 4.3,
+      "isPopular": false
+    },
+    {
+      "id": "special_001",
+      "name": "Vanilla Bean Strawberry Shortcake",
+      "category": "cake",
+      "price": 20.5,
+      "weight": "600g",
+      "imagePath": "images/best sell.png",
+      "description": "Premium vanilla bean cake with fresh strawberries and whipped cream",
+      "rating": 4.9,
+      "isPopular": true,
+      "isBestSeller": true
+    }
+  ]
+}

@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'auth_wrapper.dart';
 import 'home_screen.dart';
-import 'product_screen.dart'; // Import other screens
+import 'product_screen.dart';
 import 'cart_screen.dart';
-import 'profile_screen.dart'; // Import Profile Screen
-import 'login_screen.dart'; // Import LoginScreen
+import 'profile_screen.dart';
+import 'providers/cart_provider.dart';
+import 'services/food_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FoodService.loadFoodItems();
   runApp(const BakeryApp());
 }
 
@@ -14,11 +21,14 @@ class BakeryApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Crave Bake',
-      theme: ThemeData.dark(),
-      home: const MainScreen(), // New MainScreen that manages navigation
+    return ChangeNotifierProvider(
+      create: (context) => CartProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Crave Bake',
+        theme: ThemeData.dark(),
+        home: const AuthWrapper(),
+      ),
     );
   }
 }
@@ -60,18 +70,6 @@ class _MainScreenState extends State<MainScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person, color: Colors.white),
-            onPressed: () {
-              // Navigate to the LoginScreen when the person icon is pressed
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
-            },
-          ),
-        ],
       ),
       body: _screens[_selectedIndex], // Dynamically display the selected screen
       bottomNavigationBar: BottomNavigationBar(
@@ -81,20 +79,52 @@ class _MainScreenState extends State<MainScreen> {
         unselectedItemColor: Colors.white,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.category),
             label: 'Product',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
+            icon: Consumer<CartProvider>(
+              builder: (context, cart, child) {
+                return Stack(
+                  children: [
+                    const Icon(Icons.shopping_cart),
+                    if (cart.itemCount > 0)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
+                          ),
+                          child: Text(
+                            '${cart.itemCount}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
             label: 'Cart',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),

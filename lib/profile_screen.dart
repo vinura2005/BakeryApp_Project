@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'services/firebase_auth_service.dart';
+import 'providers/cart_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final User? currentUser = FirebaseAuth.instance.currentUser;
+    final FirebaseAuthService authService = FirebaseAuthService();
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
@@ -22,9 +29,10 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 16),
 
             // User name
-            const Text(
-              'Vinura Chirath', // Replace with dynamic user name if needed
-              style: TextStyle(
+            Text(
+              currentUser?.displayName ??
+                  'User', // Show user's display name or 'User'
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -33,12 +41,54 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 8),
 
             // Email
-            const Text(
-              'vinurachirath@gmail.com', // Replace with dynamic email
-              style: TextStyle(
+            Text(
+              currentUser?.email ?? 'No email', // Show user's email
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
               ),
+            ),
+            const SizedBox(height: 16),
+
+            // Cart info for current user
+            Consumer<CartProvider>(
+              builder: (context, cart, child) {
+                return Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[900],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.orange.withOpacity(0.3)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Cart Items:',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '${cart.itemCount}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 24),
 
@@ -80,8 +130,71 @@ class ProfileScreen extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
               ),
-              onPressed: () {
-                // Implement logout functionality
+              onPressed: () async {
+                // Show confirmation dialog
+                bool? shouldLogout = await showDialog<bool>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: const Color.fromARGB(255, 40, 40, 40),
+                      title: const Text(
+                        'Logout',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      content: const Text(
+                        'Are you sure you want to logout?',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(color: Colors.orange),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(true),
+                          child: const Text(
+                            'Logout',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                if (shouldLogout == true) {
+                  try {
+                    // Save current user's cart before logging out
+                    final cartProvider =
+                        Provider.of<CartProvider>(context, listen: false);
+                    await cartProvider.clearUserCart();
+
+                    await authService.signOut();
+                    // The AuthWrapper will automatically redirect to login screen
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Logged out successfully'),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Error logging out: $e'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  }
+                }
               },
               child: const Text(
                 'Logout',
